@@ -24,3 +24,33 @@ a {
     background: black;
   }
 }
+
+.layout{
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+.main{
+  min-height: 100vh;
+}
+
+@media (max-width: 900px){
+
+  .multi-slider .swiper-button-prev, .multi-slider .swiper-button-next {
+    top: 98px !important;
+  }
+
+  .multi-slider .swiper-button-prev:after, .multi-slider .swiper-button-next:after {
+    font-size: 26px;
+  }
+}
+
+.multi-slider .swiper-button-prev, .multi-slider .swiper-button-next {
+  color: #e31c4d !important;
+  background-color: #333;
+  border-radius: 6px;
+  top: 120px;
+  padding: 6px 8px;
+  width: auto;
+  height: auto;
+}

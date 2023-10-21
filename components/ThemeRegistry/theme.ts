@@ -1,0 +1,66 @@
+import { createTheme } from "@mui/material/styles";
+import { Inter, Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export const colors = {
+  primary: {
+    main: "#0f141d",
+    contrastText: "#fff",
+  },
+  secondary: {
+    main: "#e31c4d",
+    // main: "#ec407a",
+    // contrastText: "#222",
+    contrastText: "#0a0d12",
+  },
+};
+
+const theme = createTheme({
+  typography: {
+    fontFamily: roboto.style.fontFamily,
+  },
+  palette: {
+    text: {
+      primary: "#fff",
+    },
+    background: {
+      default: "#191919",
+    },
+    primary: {
+      main: colors.primary.main,
+      contrastText: colors.primary.contrastText,
+    },
+    secondary: {
+      main: colors.secondary.main,
+      contrastText: colors.secondary.contrastText,
+    },
+  },
+  components: {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          "& .MuiListItemIcon-root": {
+            color: colors.secondary.main,
+          },
+          "&.Mui-selected": {
+            backgroundColor: colors.secondary.main,
+            color: colors.secondary.contrastText,
+            "& .MuiListItemIcon-root": {
+              color: colors.secondary.contrastText,
+            },
+          },
+          "&.Mui-selected:hover": {
+            backgroundColor: colors.secondary.main,
+          },
+        },
+      },
+    },
+  },
+});
+
+export default theme;
