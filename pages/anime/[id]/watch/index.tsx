@@ -13,7 +13,9 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import { styles as classes } from "../../../../styles/watchAnime.styles";
 import { convertToNumber } from "../../../../utils";
-import { useSearchParams } from "next/navigation";
+// import Plyr, { PlyrSource } from "plyr-react";
+// import "plyr-react/plyr.css";
+import VideoPlayer from "../../../../components/VideoPlayer";
 
 // import { SeriesResult } from "../../../../../../types/apiResponses";
 // import TvTileSlider from "../../../../../../components/TvTileSlider/TvTileSlider";
@@ -24,15 +26,50 @@ import { useSearchParams } from "next/navigation";
 
 export const getMediaInfo = async (mediaId: string) => {
   try {
-    const mediaRes = await fetch(
+    const apiRes = await fetch(
       `https://api.consumet.org/anime/gogoanime/info/${mediaId}`
     );
-    const mediaData = await mediaRes.json();
+    const apiData = await apiRes.json();
 
-    if (mediaData.hasOwnProperty("success"))
+    if (apiData.hasOwnProperty("success"))
       throw new Error("Api call failed, check console.");
 
-    return mediaData;
+    return apiData;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Api call failed, check console.");
+  }
+};
+
+export interface EpisodeStream {
+  headers: Headers;
+  sources: Source[];
+  download: string;
+}
+
+export interface Headers {
+  Referer: string;
+}
+
+export interface Source {
+  url: string;
+  isM3U8: boolean;
+  quality: string;
+}
+
+export const getStreamInfo = async (
+  episodeId: string
+): Promise<EpisodeStream> => {
+  try {
+    const apiRes = await fetch(
+      `https://api.consumet.org/anime/gogoanime/watch/${episodeId}`
+    );
+    const apiData: EpisodeStream = await apiRes.json();
+
+    if (apiData.hasOwnProperty("success"))
+      throw new Error("Api call failed, check console.");
+
+    return apiData;
   } catch (error) {
     console.log(error);
     throw new Error("Api call failed, check console.");
@@ -67,11 +104,16 @@ export default function WatchAnime(props: WatchAnimeProps) {
   const animeId = router.query.id;
 
   const [mediaInfo, setMediaInfo] = useState<MediaInfo | null>(null);
+  const [episodeStreamInfo, setepisodeStreamInfo] =
+    useState<EpisodeStream | null>(null);
 
   useEffect(() => {
     (async () => {
       const data = await getMediaInfo(animeId as string);
       setMediaInfo(data);
+
+      const data2 = await getStreamInfo(data.episodes[0].id);
+      setepisodeStreamInfo(data2);
     })();
   }, []);
 
@@ -124,6 +166,7 @@ export default function WatchAnime(props: WatchAnimeProps) {
   if (!mediaInfo) return <LinearProgress />;
 
   console.log(mediaInfo);
+  console.log(episodeStreamInfo);
 
   const {
     id,
@@ -189,7 +232,8 @@ export default function WatchAnime(props: WatchAnimeProps) {
         </ButtonGroup>
 
         {player === 1 && (
-          <div>Player 1</div>
+          <VideoPlayer episodeStreamInfo={episodeStreamInfo} />
+
           // <iframe
           //   allowFullScreen
           //   id="watch-iframe1"

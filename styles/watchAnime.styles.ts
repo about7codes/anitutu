@@ -76,6 +76,7 @@ export const styles = {
   },
   bottom: {
     padding: "20px",
+    width: "100%",
   },
   btnGroup: {
     width: "calc(100% - 48px)",

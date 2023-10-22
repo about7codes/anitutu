@@ -1,3 +1,8 @@
+:root {
+  --app-accent-color: #e31c4d;
+  --plyr-color-main: var(--app-accent-color);
+}
+
 html,
 body {
   padding: 0;
@@ -46,7 +51,7 @@ a {
 }
 
 .multi-slider .swiper-button-prev, .multi-slider .swiper-button-next {
-  color: #e31c4d !important;
+  color: var(--app-accent-color) !important;
   background-color: #333;
   border-radius: 6px;
   top: 120px;
@@ -54,3 +59,4 @@ a {
   width: auto;
   height: auto;
 }
+
